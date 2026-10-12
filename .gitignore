@@ -1,0 +1,16 @@
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Postman (pode conter tokens)
+.postman/
+postman/
+
+# Save local da Pokédex (dados pessoais de uso)
+pokemon.json
