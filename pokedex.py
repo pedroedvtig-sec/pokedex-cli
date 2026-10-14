@@ -2,6 +2,8 @@ import requests
 
 import json
 
+import pyttsx3
+
 def salvar_pokes(pokedex):
     with open("pokemon.json", "w", encoding="utf-8") as arquivo:
         json.dump(pokedex, arquivo, ensure_ascii=False, indent=4)
@@ -48,13 +50,28 @@ def capturar_pokemon():
         tipos.append(t['type']['name'])
     return {'nome': nome, 'peso': peso, 'habilidades': habilidades, 'tipos': tipos, 'movimentos': movimentos, 'apelido': primeiro_apelido}
 
+
+def falar():
+    if pokedex:
+        motor = pyttsx3.init()
+        motor.setProperty('voice', 'roa/pt-br')
+        for i in pokedex:
+            apelido = i.get('apelido') or 'sem apelido'
+            motor.say(f"Pokemón: {i['nome']} Apelido: {apelido} Tipo: {', '.join(i['tipos'])} Peso: {i['peso']/10} kg")
+        motor.runAndWait()
+    else:
+        print("A pokedex está vazia, capture um pokemón para que o programa possa ler e falar.")
+
 def listar_pokemon():
-    print("Pokemóns capturados")
     linhas = []
     for i in pokedex:
         apelido = i.get('apelido') or 'sem apelido'
-        linhas.append(f"Nome do pokemón: {i['nome']}\nApelido: {apelido}\nTipo: {', '.join(i['tipos'])}\nPeso: {i['peso']/10} kg\n")
-    print("\n".join(linhas))
+        linhas.append(f"Nome do pokemón: {i['nome']}\nApelido: {apelido}\nTipo: {', '.join(i['tipos'])}\nPeso: {i['peso'] / 10} kg\n")
+    if linhas:
+        print("Pokemóns capturados:")
+        print("\n".join(linhas))
+    else:
+        print("Sem pokemóns na pokedéx! Capture")
 
 def deletar_pokemon():
 
@@ -96,7 +113,7 @@ def editar_pokemon():
 
 
 while True:
-    print("=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Sair")
+    print("=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Falar a pokedéx \n6 - Sair")
     try:
         opcao = int(input("Selecione uma opção:\n"))
 
@@ -118,8 +135,13 @@ while True:
         editar_pokemon()
         salvar_pokes(pokedex)
 
+
     elif opcao == 5:
+        falar()
+
+    elif opcao == 6:
         print("Finalizando programa...")
         break
+
     else:
         print("Digite outro número!")
