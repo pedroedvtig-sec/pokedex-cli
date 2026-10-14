@@ -53,8 +53,8 @@ def listar_pokemon():
     linhas = []
     for i in pokedex:
         apelido = i.get('apelido') or 'sem apelido'
-        linhas.append(f"{i['nome']} apelido: {apelido}")
-    print(", ".join(linhas))
+        linhas.append(f"Nome do pokemón: {i['nome']}\nApelido: {apelido}\nTipo: {', '.join(i['tipos'])}\nPeso: {i['peso']/10} kg\n")
+    print("\n".join(linhas))
 
 def deletar_pokemon():
 
