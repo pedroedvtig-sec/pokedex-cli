@@ -14,3 +14,8 @@ postman/
 
 # Save local da Pokédex (dados pessoais de uso)
 pokemon.json
+
+# voz da pokedex
+*.onnx
+*.onnx.json
+*.wav
