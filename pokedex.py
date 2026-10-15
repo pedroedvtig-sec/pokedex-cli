@@ -19,14 +19,21 @@ pokedex = carregar_pokes()
 
 def get_pokemon():
     while True:
-        pokemon = input("Digite o nome do pokemon que você busca:\n").lower().strip()
+        pokemon = input("Digite o nome do pokemon que você busca ou digite 'n' para não capturar nada:\n").lower().strip()
         if not pokemon:
             print("Não deixe o campo vazio.")
             continue
-        resposta = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon}")
+        elif pokemon == "n":
+            print("cancelando captura")
+            return
+        try:
+            resposta = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon}")
+
+        except requests.exceptions.ConnectionError:
+            print("Sem internet, conecte a uma rede")
+            return
         if resposta.status_code == 200:
             return resposta.json()
-
         else:
             print("Pokemon não encontrado! Digite novamente")
 
@@ -34,6 +41,8 @@ def get_pokemon():
 
 def capturar_pokemon():
     info_pokemon = get_pokemon()
+    if info_pokemon is None:
+        return
     print(f"pokemón capturado")
     primeiro_apelido = input("Digite um apelido para o pokemón:\n").lower().strip()
 
@@ -124,7 +133,10 @@ while True:
         listar_pokemon()
 
     elif opcao == 2:
-        pokedex.append(capturar_pokemon())
+        novo_pokemon = capturar_pokemon()
+        if novo_pokemon is None:
+            continue
+        pokedex.append(novo_pokemon)
         salvar_pokes(pokedex)
 
     elif opcao == 3:
