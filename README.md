@@ -10,6 +10,7 @@ Este projeto é parte dos meus estudos de Python. Com ele pratiquei consumo de A
 - **Listar (Read):** mostra os Pokémon capturados e seus apelidos.
 - **Editar (Update):** troca o apelido de um Pokémon capturado.
 - **Remover (Delete):** apaga um Pokémon da Pokédex.
+- **Falar a Pokédex:** lê em voz alta nome, apelido, tipos e peso de cada Pokémon capturado, com uma voz neural em português gerada localmente pelo [Piper](https://github.com/OHF-Voice/piper1-gpl), sem internet.
 - **Persistência:** tudo fica gravado em `pokemon.json`, que é carregado automaticamente ao iniciar.
 - Tratamento de entrada: o menu aceita só números; buscas vazias são recusadas; maiúsculas e espaços extras são normalizados; nomes inexistentes na API pedem uma nova tentativa. Pokémon sem apelido aparecem como “sem apelido”.
 
@@ -21,7 +22,16 @@ Requisitos: Python 3.10 ou superior.
 git clone https://github.com/pedroedvtig-sec/pokedex-cli.git
 cd pokedex-cli
 pip install -r requirements.txt
+python -m piper.download_voices pt_BR-jeff-medium
 python pokedex.py
+```
+
+O comando `piper.download_voices` baixa a voz usada na opção de falar (cerca de 60 MB) para a pasta do projeto. Ele só precisa ser rodado uma vez. O arquivo da voz (`.onnx`) não fica no repositório por causa do tamanho.
+
+Para tocar o áudio, o programa usa o `paplay`, que já vem na maioria das distribuições Linux. Se ele não estiver instalado:
+
+```bash
+sudo apt install pulseaudio-utils
 ```
 
 ## Exemplo de uso
@@ -32,10 +42,11 @@ python pokedex.py
 2 - Capturar Pokemón
 3 - Remover Pokemón
 4 - Editar Pokemón
-5 - Sair
+5 - Falar a pokedéx
+6 - Sair
 Selecione uma opção:
 2
-Digite o nome do pokemon que você busca:
+Digite o nome do pokemon que você busca ou digite 'n' para não capturar nada:
 pikachu
 ```
 
@@ -44,6 +55,7 @@ pikachu
 - Python
 - [requests](https://pypi.org/project/requests/) para as chamadas HTTP
 - `json` (biblioteca padrão) para salvar os dados
+- [Piper](https://github.com/OHF-Voice/piper1-gpl) (`piper-tts`) para gerar a voz, com `wave` e `subprocess` (biblioteca padrão) para gravar e tocar o áudio
 
 ## O que aprendi
 
