@@ -2,7 +2,12 @@ import requests
 
 import json
 
-import pyttsx3
+
+import wave
+import subprocess
+
+from piper import PiperVoice
+
 
 def salvar_pokes(pokedex):
     with open("pokemon.json", "w", encoding="utf-8") as arquivo:
@@ -59,15 +64,14 @@ def capturar_pokemon():
         tipos.append(t['type']['name'])
     return {'nome': nome, 'peso': peso, 'habilidades': habilidades, 'tipos': tipos, 'movimentos': movimentos, 'apelido': primeiro_apelido}
 
-
 def falar():
     if pokedex:
-        motor = pyttsx3.init()
-        motor.setProperty('voice', 'roa/pt-br')
+        motor = PiperVoice.load("pt_BR-jeff-medium.onnx")
         for i in pokedex:
             apelido = i.get('apelido') or 'sem apelido'
-            motor.say(f"Pokemón: {i['nome']} Apelido: {apelido} Tipo: {', '.join(i['tipos'])} Peso: {i['peso']/10} kg")
-        motor.runAndWait()
+            with wave.open("pokedex.wav", "wb") as arquivo:
+                motor.synthesize_wav(f"Pokemón: {i['nome']} Apelido: {apelido} Tipo: {', '.join(i['tipos'])} Peso: {i['peso']/10} kg", arquivo)
+            subprocess.run(["paplay", "pokedex.wav"])
     else:
         print("A pokedex está vazia, capture um pokemón para que o programa possa ler e falar.")
 
