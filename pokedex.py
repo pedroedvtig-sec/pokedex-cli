@@ -2,6 +2,7 @@ from armazenamento import carregar_pokes
 from armazenamento import salvar_pokes
 from api import capturar_pokemon
 from voz import falar
+from hectogramas_para_kg import calculo
 
 pokedex = carregar_pokes()
 
@@ -9,8 +10,9 @@ pokedex = carregar_pokes()
 def listar_pokemon():
     linhas = []
     for i in pokedex:
+        peso = calculo(i['peso'])
         apelido = i.get('apelido') or 'sem apelido'
-        linhas.append(f"Nome do pokemón: {i['nome']}\nApelido: {apelido}\nTipo: {', '.join(i['tipos'])}\nPeso: {i['peso'] / 10} kg\n")
+        linhas.append(f"Nome do pokemón: {i['nome']}\nApelido: {apelido}\nTipo: {', '.join(i['tipos'])}\nPeso: {peso} kg\n")
     if linhas:
         print("Pokemóns capturados:")
         print("\n".join(linhas))
