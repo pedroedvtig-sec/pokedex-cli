@@ -3,6 +3,7 @@ from armazenamento import salvar_pokes
 from api import capturar_pokemon
 from voz import falar
 from hectogramas_para_kg import calculo
+from lista_nomes import nomes_pokemon
 
 pokedex = carregar_pokes()
 
@@ -23,9 +24,7 @@ def deletar_pokemon():
 
     while pokedex:
         listar_pokemon()
-        nomes_poke = []
-        for i in pokedex:
-            nomes_poke.append(i['nome'])
+        nomes_poke = nomes_pokemon(pokedex)
         qual_del = input("Digite qual pokemon deve ser deletado:\n").lower().strip()
         if qual_del in nomes_poke:
             for d in pokedex:
@@ -41,14 +40,12 @@ def editar_pokemon():
     while pokedex:
         listar_pokemon()
         qualedit = input("Digite qual pokemón deve ser editado:\n").lower().strip()
-        nomes_poke = []
-        for i in pokedex:
-            nomes_poke.append(i['nome'])
+        nomes_poke = nomes_pokemon(pokedex)
         if qualedit in nomes_poke:
             apelido = input("Digite um apelido para seu pokemón:\n").lower().strip()
-            for a in pokedex:
+            for i in pokedex:
                 if qualedit == a['nome']:
-                    a['apelido'] = apelido
+                    i['apelido'] = apelido
                     print(f" segue o nome e o apelido do pokemon {a['nome']}, {a['apelido']}")
                     return
 
