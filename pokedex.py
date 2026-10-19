@@ -54,40 +54,40 @@ def editar_pokemon():
 
     print("Capture um pokemón! Sua pokedéx está vazia")
 
+if __name__ == "__main__":
+    while True:
+        print("=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Falar a pokedéx \n6 - Sair")
+        try:
+            opcao = int(input("Selecione uma opção:\n"))
 
-while True:
-    print("=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Falar a pokedéx \n6 - Sair")
-    try:
-        opcao = int(input("Selecione uma opção:\n"))
-
-    except ValueError:
-        print("Digite apenas número, nem letra ou caractere especial")
-        continue
-    if opcao == 1:
-        listar_pokemon()
-
-    elif opcao == 2:
-        novo_pokemon = capturar_pokemon()
-        if novo_pokemon is None:
+        except ValueError:
+            print("Digite apenas número, nem letra ou caractere especial")
             continue
-        pokedex.append(novo_pokemon)
-        salvar_pokes(pokedex)
+        if opcao == 1:
+            listar_pokemon()
 
-    elif opcao == 3:
-        deletar_pokemon()
-        salvar_pokes(pokedex)
+        elif opcao == 2:
+            novo_pokemon = capturar_pokemon()
+            if novo_pokemon is None:
+                continue
+            pokedex.append(novo_pokemon)
+            salvar_pokes(pokedex)
 
-    elif opcao == 4:
-        editar_pokemon()
-        salvar_pokes(pokedex)
+        elif opcao == 3:
+            deletar_pokemon()
+            salvar_pokes(pokedex)
+
+        elif opcao == 4:
+            editar_pokemon()
+            salvar_pokes(pokedex)
 
 
-    elif opcao == 5:
-        falar(pokedex)
+        elif opcao == 5:
+            falar(pokedex)
 
-    elif opcao == 6:
-        print("Finalizando programa...")
-        break
+        elif opcao == 6:
+            print("Finalizando programa...")
+            break
 
-    else:
-        print("Digite outro número!")
+        else:
+            print("Digite outro número!")
