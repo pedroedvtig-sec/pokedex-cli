@@ -8,45 +8,51 @@ from lista_nomes import nomes_pokemon
 pokedex = carregar_pokes()
 
 
-def listar_pokemon():
+def listar_pokemon(pokedex):
     linhas = []
-    for i in pokedex:
-        peso = calculo(i['peso'])
-        apelido = i.get('apelido') or 'sem apelido'
-        linhas.append(f"Nome do pokemón: {i['nome']}\nApelido: {apelido}\nTipo: {', '.join(i['tipos'])}\nPeso: {peso} kg\n")
+    for pokemon in pokedex:
+        peso = calculo(pokemon['peso'])
+        apelido = pokemon.get('apelido') or 'sem apelido'
+        linhas.append(f"Nome do pokemón: {pokemon['nome']}\nApelido: {apelido}\nTipo: {', '.join(pokemon['tipos'])}\nPeso: {peso} kg\n")
     if linhas:
         print("Pokemóns capturados:")
         print("\n".join(linhas))
     else:
         print("Sem pokemóns na pokedéx! Capture")
 
-def deletar_pokemon():
+#Código	                            Como ler
+#def deletar_pokemon(pokedex):	    “Para deletar um pokémon, eu preciso receber uma pokédex.”
+#deletar_pokemon(pokedex)	        “Deleta um pokémon desta pokédex aquiss.”
+#deletar_pokemon(lista_de_teste)	“Deleta um pokémon desta outra pokédex.”
+
+
+def deletar_pokemon(pokedex):
 
     while pokedex:
-        listar_pokemon()
+        listar_pokemon(pokedex)
         nomes_poke = nomes_pokemon(pokedex)
         qual_del = input("Digite qual pokemon deve ser deletado:\n").lower().strip()
         if qual_del in nomes_poke:
-            for d in pokedex:
-                if qual_del == d['nome']:
-                    pokedex.remove(d)
+            for pokemon in pokedex:
+                if qual_del == pokemon['nome']:
+                    pokedex.remove(pokemon)
                     print(f"Pokemon {qual_del} deletado!")
                     return
         else:
             print("Digite um pokemón que esteja na pokedex!")
     print("Sua pokedéx esta vazia, capture um pokemón para poder excluir")
 
-def editar_pokemon():
+def editar_pokemon(pokedex):
     while pokedex:
-        listar_pokemon()
+        listar_pokemon(pokedex)
         qualedit = input("Digite qual pokemón deve ser editado:\n").lower().strip()
         nomes_poke = nomes_pokemon(pokedex)
         if qualedit in nomes_poke:
             apelido = input("Digite um apelido para seu pokemón:\n").lower().strip()
-            for i in pokedex:
-                if qualedit == a['nome']:
-                    i['apelido'] = apelido
-                    print(f" segue o nome e o apelido do pokemon {a['nome']}, {a['apelido']}")
+            for pokemon in pokedex:
+                if qualedit == pokemon['nome']:
+                    pokemon['apelido'] = apelido
+                    print(f" segue o nome e o apelido do pokemon {pokemon['nome']}, {pokemon['apelido']}")
                     return
 
         else:
@@ -64,7 +70,7 @@ if __name__ == "__main__":
             print("Digite apenas número, nem letra ou caractere especial")
             continue
         if opcao == 1:
-            listar_pokemon()
+            listar_pokemon(pokedex)
 
         elif opcao == 2:
             novo_pokemon = capturar_pokemon()
@@ -74,11 +80,11 @@ if __name__ == "__main__":
             salvar_pokes(pokedex)
 
         elif opcao == 3:
-            deletar_pokemon()
+            deletar_pokemon(pokedex)
             salvar_pokes(pokedex)
 
         elif opcao == 4:
-            editar_pokemon()
+            editar_pokemon(pokedex)
             salvar_pokes(pokedex)
 
 
