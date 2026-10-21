@@ -67,31 +67,32 @@ if __name__ == "__main__":
         except ValueError:
             print("Digite apenas número, nem letra ou caractere especial")
             continue
-        if opcao == 1:
-            listar_pokemon(pokedex)
+        match opcao:
+            case 1:
+                listar_pokemon(pokedex)
 
-        elif opcao == 2:
-            novo_pokemon = capturar_pokemon()
-            if novo_pokemon is None:
-                continue
-            pokedex.append(novo_pokemon)
-            salvar_pokes(pokedex)
+            case 2:
+                novo_pokemon = capturar_pokemon()
+                if novo_pokemon is None:
+                    continue
+                pokedex.append(novo_pokemon)
+                salvar_pokes(pokedex)
 
-        elif opcao == 3:
-            deletar_pokemon(pokedex)
-            salvar_pokes(pokedex)
+            case 3:
+                deletar_pokemon(pokedex)
+                salvar_pokes(pokedex)
 
-        elif opcao == 4:
-            editar_pokemon(pokedex)
-            salvar_pokes(pokedex)
+            case 4:
+                editar_pokemon(pokedex)
+                salvar_pokes(pokedex)
 
 
-        elif opcao == 5:
-            falar(pokedex)
+            case 5:
+                falar(pokedex)
 
-        elif opcao == 6:
-            print("Finalizando programa...")
-            break
+            case 6:
+                print("Finalizando programa...")
+                break
 
-        else:
-            print("Digite outro número!")
+            case _:
+                print("Digite outro número!")
