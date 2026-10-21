@@ -14,3 +14,10 @@ def test_deletar_depois_de_errar_o_nome(monkeypatch):
     deletar_pokemon(lista_de_teste)
     #essa é a saida esperada, se eu colocar charizard, dá erro
     assert lista_de_teste == [{'nome': 'pikachu', 'peso': 60, 'tipos': ['electric']}]
+
+def test_deletar_pokemon_pokedex_vazia(monkeypatch):
+    lista_vazia = []
+    respostas_do_usuario(monkeypatch)
+    deletar_pokemon(lista_vazia)
+
+    assert lista_vazia == []
