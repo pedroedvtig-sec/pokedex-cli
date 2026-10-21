@@ -37,14 +37,14 @@ sudo apt install pulseaudio-utils
 
 ## Testes
 
-O projeto tem testes automatizados com [pytest](https://docs.pytest.org/). Para rodar todos, na pasta do projeto:
+O projeto tem testes automatizados com [pytest](https://docs.pytest.org/), que ficam na pasta `tests/`. Para rodar todos, na pasta principal do projeto:
 
 ```bash
 pytest
 ```
 
 ```
-23 passed in 0.24s
+25 passed
 ```
 
 Os testes não usam a internet nem o `pokemon.json` de verdade:
@@ -52,9 +52,26 @@ Os testes não usam a internet nem o `pokemon.json` de verdade:
 - **`test_nomes_lista.py`** e **`test_hectogramas_para_kg.py`:** testes unitários das funções que recebem um valor e devolvem outro (lista de nomes e conversão de peso), incluindo os casos “não bonitos”, como Pokédex vazia e peso que não termina em zero.
 - **`test_armazenamento.py`:** salva e carrega a Pokédex dentro de uma pasta temporária (`tmp_path`), incluindo o primeiro uso, quando o arquivo ainda não existe.
 - **`test_api.py`:** usa o `monkeypatch` do pytest para trocar o `input()` por respostas prontas e o `requests.get()` por uma resposta falsa. Assim dá para testar cancelar com `n`, campo vazio, nome errado, falta de internet e o dicionário montado na captura, sem chamar a PokéAPI.
+- **`test_pokedex.py`:** testa o remover. Uma lista de teste no mesmo formato da Pokédex real e uma fila de respostas no lugar do `input()`: o usuário erra o nome, o programa pede de novo e remove o certo; e, com a Pokédex vazia, o programa avisa sem perguntar nada.
 - **`test_voz.py`:** confere o aviso quando a Pokédex está vazia, sem carregar a voz nem tocar áudio.
 
+O arquivo `pytest.ini` diz ao pytest que os testes estão em `tests/` e que o código fica na pasta principal, para os `import` dos testes encontrarem os módulos.
+
 ## Estrutura do projeto
+
+```
+pokedex-cli/
+├── pokedex.py              # menu e funções de listar, remover e editar
+├── api.py
+├── armazenamento.py
+├── voz.py
+├── lista_nomes.py
+├── hectogramas_para_kg.py
+├── tests/                  # testes automatizados (pytest)
+├── pytest.ini
+├── requirements.txt
+└── README.md
+```
 
 | Arquivo | O que faz |
 |---|---|
@@ -64,7 +81,8 @@ Os testes não usam a internet nem o `pokemon.json` de verdade:
 | `voz.py` | Lê a Pokédex em voz alta com o Piper |
 | `lista_nomes.py` | Monta a lista com os nomes dos Pokémon capturados |
 | `hectogramas_para_kg.py` | Converte o peso de hectogramas para kg |
-| `test_*.py` | Testes automatizados (pytest) |
+| `tests/` | Testes automatizados (pytest) |
+| `pytest.ini` | Configuração do pytest: onde estão os testes e o código |
 
 ## Exemplo de uso
 
@@ -105,6 +123,11 @@ pikachu
 - Escrever testes com pytest seguindo o padrão preparar, executar e conferir (Arrange, Act, Assert), e entender por que testar com 3 casos: com um Pokémon só, o bug do `return` dentro do `for` passava despercebido; só os casos com vários Pokémon e com a Pokédex vazia mostraram o erro.
 - Que importar um arquivo roda o arquivo inteiro (por isso o menu começou a rodar dentro do pytest).
 - Ler a saída do pytest (`Expected` × `Actual`) e decidir quem está errado: o código ou o teste.
+- Proteger o menu com `if __name__ == "__main__":`, para ele só rodar quando executo o `pokedex.py` e não quando ele é importado pelos testes.
+- Fazer as funções receberem a Pokédex por parâmetro em vez de usar uma variável de fora escondida, o que também permitiu testá-las com uma lista de teste.
+- Testar uma função sem `return` (como o remover) conferindo a lista depois, já que ela é a mesma lista que foi entregue, e não uma cópia.
+- Fazer  o `assert` errar de propósito para provar que um teste que passou de primeira também sabe falhar.
+- Separar os testes numa pasta própria e configurar o `pythonpath` do pytest, depois de ver o `ModuleNotFoundError` que a mudança causou.
 
 ## Próximos passos
 
@@ -112,7 +135,11 @@ pikachu
 - [x] Tratar falta de internet ao buscar na API.
 - [ ] Definir tempo máximo de espera (`timeout`) nas chamadas à API.
 - [x] Escrever testes automatizados para as funções de API, armazenamento, conversão de peso e lista de nomes.
-- [ ] Testar também remover e editar (para isso, o menu precisa parar de rodar quando o `pokedex.py` é importado).
+- [x] Fazer o menu parar de rodar quando o `pokedex.py` é importado.
+- [x] Organizar os testes na pasta `tests/`.
+- [ ] Terminar os testes do remover (ex.: usuário digita só espaço).
+- [ ] Testar o editar.
+- [ ] Rodar os testes automaticamente a cada push (GitHub Actions).
 - [ ] Impedir a captura duplicada do mesmo Pokémon.
 - [ ] Remover um Pokémon pelo apelido.
 - [ ] Trocar o JSON por um banco de dados SQLite.
