@@ -5,9 +5,6 @@ from voz import falar
 from hectogramas_para_kg import calculo
 from lista_nomes import nomes_pokemon
 
-pokedex = carregar_pokes()
-
-
 def listar_pokemon(pokedex):
     linhas = []
     for pokemon in pokedex:
@@ -61,6 +58,7 @@ def editar_pokemon(pokedex):
     print("Capture um pokemón! Sua pokedéx está vazia")
 
 if __name__ == "__main__":
+    pokedex = carregar_pokes()
     while True:
         print("=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Falar a pokedéx \n6 - Sair")
         try:
