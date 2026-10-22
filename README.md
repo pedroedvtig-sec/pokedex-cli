@@ -79,7 +79,7 @@ pokedex-cli/
 | `api.py` | Busca na PokéAPI e monta o Pokémon capturado |
 | `armazenamento.py` | Salva e carrega a Pokédex no `pokemon.json` |
 | `voz.py` | Lê a Pokédex em voz alta com o Piper |
-| `lista_nomes.py` | Monta a lista com os nomes dos Pokémon capturados |
+| `listas_pokemons.py` | Monta a lista com os nomes dos Pokémon capturados |
 | `hectogramas_para_kg.py` | Converte o peso de hectogramas para kg |
 | `tests/` | Testes automatizados (pytest) |
 | `pytest.ini` | Configuração do pytest: onde estão os testes e o código |

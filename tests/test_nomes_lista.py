@@ -1,4 +1,4 @@
-from lista_nomes import nomes_pokemon
+from listas_pokemons import nomes_pokemon
 
 def test_varios_pokemons():
     pokedex_teste = [{'nome': 'pikachu'}, {'nome': 'squirtle'}, {'nome': 'charizard'}]

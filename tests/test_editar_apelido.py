@@ -22,3 +22,19 @@ def test_editar_vazio(monkeypatch):
     assert lista == [
         { 'apelido': '', 'nome': 'pikachu', 'peso': 60, 'tipos': ['electric']},
         {'nome': 'charizard', 'peso': 120, 'tipos': ['fire', 'flying']}]
+
+def test_sem_apelido_e_recusado(monkeypatch):
+    lista = [{'nome': 'pikachu', 'peso': 60, 'tipos': ['electric']}]
+    respostas_do_usuario(monkeypatch, 'pikachu', 'sem_apelido', 'teste')
+    editar_pokemon(lista)
+    assert lista == [{'nome': 'pikachu', 'peso': 60, 'tipos': ['electric'],'apelido': 'teste'}]
+
+def test_apelido_duplicado(monkeypatch):
+    lista = [
+        {'nome': 'charizard', 'peso': 120, 'tipos': ['fire', 'flying'], 'apelido': 'fogo'},
+        {'nome': 'pikachu', 'peso': 60, 'tipos': ['electric']}]
+    respostas_do_usuario(monkeypatch, 'pikachu', 'fogo', 'choque')
+    editar_pokemon(lista)
+    assert lista == [
+        {'nome': 'charizard', 'peso': 120, 'tipos': ['fire', 'flying'],'apelido': 'fogo'},
+        {'nome': 'pikachu', 'peso': 60, 'tipos': ['electric'], 'apelido': 'choque'}]

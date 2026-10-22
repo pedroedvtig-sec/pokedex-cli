@@ -3,7 +3,8 @@ from armazenamento import salvar_pokes
 from api import capturar_pokemon
 from voz import falar
 from hectogramas_para_kg import calculo
-from lista_nomes import nomes_pokemon
+from listas_pokemons import nomes_pokemon
+from listas_pokemons import apelido_poke
 
 def listar_pokemon(pokedex):
     linhas = []
@@ -44,8 +45,12 @@ def editar_pokemon(pokedex):
         listar_pokemon(pokedex)
         qualedit = input("Digite qual pokemón deve ser editado:\n").lower().strip()
         nomes_poke = nomes_pokemon(pokedex)
+        apelidos = apelido_poke(pokedex)
         if qualedit in nomes_poke:
             apelido = input("Digite um apelido para seu pokemón:\n").lower().strip()
+            while apelido in apelidos:
+                apelido = input("digite outro apelido, este já está em uso:\n").lower().strip()
+
             for pokemon in pokedex:
                 if qualedit == pokemon['nome']:
                     pokemon['apelido'] = apelido
@@ -57,10 +62,12 @@ def editar_pokemon(pokedex):
 
     print("Capture um pokemón! Sua pokedéx está vazia")
 
-if __name__ == "__main__":
+
+def main():
     pokedex = carregar_pokes()
     while True:
-        print("=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Falar a pokedéx \n6 - Sair")
+        print(
+            "=== Pokedex === \n1 - Listar Pokemóns capturados \n2 - Capturar Pokemón \n3 - Remover Pokemón \n4 - Editar Pokemón \n5 - Falar a pokedéx \n6 - Sair")
         try:
             opcao = int(input("Selecione uma opção:\n"))
 
@@ -86,7 +93,6 @@ if __name__ == "__main__":
                 editar_pokemon(pokedex)
                 salvar_pokes(pokedex)
 
-
             case 5:
                 falar(pokedex)
 
@@ -96,3 +102,6 @@ if __name__ == "__main__":
 
             case _:
                 print("Digite outro número!")
+
+if __name__ == "__main__":
+    main()
