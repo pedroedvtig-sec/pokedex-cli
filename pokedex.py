@@ -25,12 +25,29 @@ def listar_pokemon(pokedex):
 
 
 def deletar_pokemon(pokedex):
-
+    #frutas = ['maçã', 'banana', 'uva']
+    #for numero, fruta in enumerate(frutas, start=1):
+        #print(f"{numero} - {fruta}")
     while pokedex:
         listar_pokemon(pokedex)
         nomes_poke = nomes_pokemon(pokedex)
+        repeticao_pokemon = 0
+        lista_repetidos = []
         qual_del = input("Digite qual pokemon deve ser deletado:\n").lower().strip()
         if qual_del in nomes_poke:
+            for pokemon_contador in pokedex:
+                if pokemon_contador['nome'] == qual_del:
+                    lista_repetidos.append(pokemon_contador)
+                    repeticao_pokemon += 1
+            if repeticao_pokemon >= 2:
+                print(f"Você tem {repeticao_pokemon} iguais na pokedex:\n")
+                for numero, pokemon in enumerate(lista_repetidos, start=1):
+                    print(f"{numero} - {pokemon['nome']} Apelido: {pokemon['apelido']}")
+                escolha = int(input("Escolha um id para remover o pokemon desejado!\n"))
+                pokemon_escolhido = lista_repetidos[escolha-1]
+                pokedex.remove(pokemon_escolhido)
+                print(f"Pokemón {pokemon_escolhido['nome']} removido!")
+                return
             for pokemon in pokedex:
                 if qual_del == pokemon['nome']:
                     pokedex.remove(pokemon)
@@ -50,7 +67,6 @@ def editar_pokemon(pokedex):
             apelido = input("Digite um apelido para seu pokemón:\n").lower().strip()
             while apelido in apelidos:
                 apelido = input("digite outro apelido, este já está em uso:\n").lower().strip()
-
             for pokemon in pokedex:
                 if qualedit == pokemon['nome']:
                     pokemon['apelido'] = apelido
