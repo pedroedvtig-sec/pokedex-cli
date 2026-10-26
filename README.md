@@ -1,5 +1,7 @@
 # Pokédex CLI
 
+![Testes](https://github.com/pedroedvtig-sec/pokedex-cli/actions/workflows/testes.yml/badge.svg)
+
 Pokédex de terminal em Python que consome a [PokéAPI](https://pokeapi.co/). É possível buscar um Pokémon pelo nome, capturá-lo com um apelido e listar, editar ou remover os capturados. Os dados ficam salvos em um arquivo JSON entre uma execução e outra, e a Pokédex pode ser lida em voz alta.
 
 Este projeto é parte dos meus estudos de Python. Com ele pratiquei consumo de API REST, persistência em JSON, as quatro operações de um CRUD, organização do código em módulos e testes automatizados com pytest.
