@@ -1,4 +1,5 @@
 import requests
+from listas_pokemons import apelido_poke
 
 def get_pokemon():
     while True:
@@ -21,12 +22,15 @@ def get_pokemon():
             print("Pokemon não encontrado! Digite novamente")
 
 
-def capturar_pokemon():
+def capturar_pokemon(pokedex):
     info_pokemon = get_pokemon()
     if info_pokemon is None:
         return
     print(f"pokemón capturado")
+    apelidos = apelido_poke(pokedex)
     primeiro_apelido = input("Digite um apelido para o pokemón:\n").lower().strip()
+    while primeiro_apelido in apelidos:
+        primeiro_apelido = input("digite outro apelido, este já está em uso:\n").lower().strip()
 
     nome = info_pokemon['name']
     peso = info_pokemon['weight']

@@ -105,24 +105,37 @@ def test_sem_internet_devolve_none(monkeypatch, capsys):
 def test_capturar_monta_o_dicionario_da_pokedex(monkeypatch):
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, "pikachu", "Pika")
-    assert capturar_pokemon() == {
+    assert capturar_pokemon([]) == {
         'nome': 'pikachu',
         'peso': 60,
         'habilidades': ['static', 'lightning-rod', 'habilidade-3'],  # só 3
         'tipos': ['electric'],
         'movimentos': ['movimento-1', 'movimento-2', 'movimento-3',
                        'movimento-4', 'movimento-5'],  # só 5
-        'apelido': 'pika',  # apelido também vai para minúsculas
+        'apelido': 'pika',
     }
 
 
 def test_capturar_sem_apelido(monkeypatch):
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, "pikachu", "")
-    assert capturar_pokemon()['apelido'] == ''
+    assert capturar_pokemon([])['apelido'] == ''
 
 
 def test_capturar_cancelado_devolve_none(monkeypatch):
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, "n")
-    assert capturar_pokemon() is None
+    assert capturar_pokemon([]) is None
+
+
+def test_apelido_igual(monkeypatch):
+    # preparar
+    lista = [{'nome': 'pikachu','apelido': 'fogo'}]
+    api_que_conhece(monkeypatch, "pikachu")
+    respostas_do_usuario(monkeypatch, 'pikachu', 'fogo', 'foguinho')
+
+    # chamar (uma vez só, entregando a lista)
+    novo_pokemon = capturar_pokemon(lista)
+
+    # conferir só o apelido
+    assert novo_pokemon['apelido'] == 'foguinho'

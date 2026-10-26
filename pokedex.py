@@ -96,7 +96,7 @@ def main():
                 listar_pokemon(pokedex)
 
             case 2:
-                novo_pokemon = capturar_pokemon()
+                novo_pokemon = capturar_pokemon(pokedex)
                 if novo_pokemon is None:
                     continue
                 pokedex.append(novo_pokemon)
