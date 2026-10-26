@@ -18,16 +18,8 @@ def listar_pokemon(pokedex):
     else:
         print("Sem pokemóns na pokedéx! Capture")
 
-#Código	                            Como ler
-#def deletar_pokemon(pokedex):	    “Para deletar um pokémon, eu preciso receber uma pokédex.”
-#deletar_pokemon(pokedex)	        “Deleta um pokémon desta pokédex aquiss.”
-#deletar_pokemon(lista_de_teste)	“Deleta um pokémon desta outra pokédex.”
-
 
 def deletar_pokemon(pokedex):
-    #frutas = ['maçã', 'banana', 'uva']
-    #for numero, fruta in enumerate(frutas, start=1):
-        #print(f"{numero} - {fruta}")
     while pokedex:
         listar_pokemon(pokedex)
         nomes_poke = nomes_pokemon(pokedex)
@@ -43,7 +35,16 @@ def deletar_pokemon(pokedex):
                 print(f"Você tem {repeticao_pokemon} iguais na pokedex:\n")
                 for numero, pokemon in enumerate(lista_repetidos, start=1):
                     print(f"{numero} - {pokemon['nome']} Apelido: {pokemon['apelido']}")
-                escolha = int(input("Escolha um id para remover o pokemon desejado!\n"))
+                while True:
+                    try:
+                        escolha = int(input("Escolha um id para remover o pokemon desejado!\n"))
+                    except ValueError:
+                        print("numeros apenas")
+                        continue
+                    if escolha <= repeticao_pokemon and escolha >= 1:
+                        break
+                    else:
+                        print("Número inválido")
                 pokemon_escolhido = lista_repetidos[escolha-1]
                 pokedex.remove(pokemon_escolhido)
                 print(f"Pokemón {pokemon_escolhido['nome']} removido!")
