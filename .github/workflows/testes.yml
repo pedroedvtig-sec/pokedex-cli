@@ -1,0 +1,14 @@
+name: Testes
+
+on: [push, pull_request] #roda nessas condições o git, push, pull
+
+jobs:
+  pytest:                        # o que é pra rodar, nome do trabalho
+    runs-on: ubuntu-latest       # escolha do computador do github
+    steps:                       # passos
+      - uses: actions/checkout@v4          # 1. baixando os codigos
+      - uses: actions/setup-python@v5      # 2. instala o Python
+        with:
+          python-version: "3.14.4"            # versão utilizada no .venv
+      - run: pip install -r requirements.txt   # 3. instala as dependências
+      - run: pytest                               # 4.  o comando que roda os testes
