@@ -59,6 +59,18 @@ def api_que_conhece(monkeypatch, *nomes_existentes):
     return urls_pedidas
 
 
+def pokebola_que_cai(monkeypatch, *sorteios):
+    """Faz cada random.random() devolver estes números, um por tentativa, em ordem.
+
+    Também troca o time.sleep() por um que não espera nada,
+    para os testes não ficarem 1,5 segundo parados em cada pokébola.
+    Lembrete: no api.py, sorteio <= 0.6 pega; maior que 0.6 escapa.
+    """
+    fila = iter(sorteios)
+    monkeypatch.setattr(api.random, "random", lambda: next(fila))
+    monkeypatch.setattr(api.time, "sleep", lambda segundos: None)
+
+
 # ---------- get_pokemon() ----------
 
 def test_cancelar_com_n_devolve_none(monkeypatch):
@@ -106,6 +118,7 @@ def test_capturar_monta_o_dicionario_da_pokedex(monkeypatch):
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, "pikachu", "Pika")
     monkeypatch.setattr(api.random, "randint", lambda a, b: 2)
+    pokebola_que_cai(monkeypatch, 0.1)  # pega de primeira
     assert capturar_pokemon([]) == {
         'nome': 'pikachu',
         'peso': 60,
@@ -120,6 +133,7 @@ def test_capturar_monta_o_dicionario_da_pokedex(monkeypatch):
 def test_capturar_sem_apelido(monkeypatch):
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, "pikachu", "")
+    pokebola_que_cai(monkeypatch, 0.1)  # pega de primeira
     assert capturar_pokemon([])['apelido'] == ''
 
 
@@ -133,6 +147,7 @@ def test_apelido_igual(monkeypatch):
     lista = [{'nome': 'pikachu','apelido': 'fogo'}]
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, 'pikachu', 'fogo', 'foguinho')
+    pokebola_que_cai(monkeypatch, 0.1)  # pega de primeira
 
     novo_pokemon = capturar_pokemon(lista)
 
@@ -143,4 +158,39 @@ def test_capturar_sem_shiny(monkeypatch):
     api_que_conhece(monkeypatch, "pikachu")
     respostas_do_usuario(monkeypatch, "pikachu", "Pika")
     monkeypatch.setattr(api.random, "randint", lambda a, b: 4)
+    pokebola_que_cai(monkeypatch, 0.1)  # pega de primeira
     assert capturar_pokemon([])['shiny'] is False
+
+
+# ---------- chance de captura (3 tentativas) ----------
+
+def test_pega_na_segunda_tentativa(monkeypatch, capsys):
+    api_que_conhece(monkeypatch, "pikachu")
+    respostas_do_usuario(monkeypatch, "pikachu", "Pika")
+    pokebola_que_cai(monkeypatch, 0.9, 0.3)  # 1ª escapa, 2ª pega
+
+    novo_pokemon = capturar_pokemon([])
+
+    assert novo_pokemon['nome'] == 'pikachu'
+    saida = capsys.readouterr().out
+    assert saida.count("Você jogou a pokebola") == 2
+    assert "Restam 2 tentativas" in saida
+
+
+def test_foge_depois_de_3_falhas(monkeypatch, capsys):
+    api_que_conhece(monkeypatch, "pikachu")
+    respostas_do_usuario(monkeypatch, "pikachu")  # só o nome: fugiu, não pede apelido
+    pokebola_que_cai(monkeypatch, 0.9, 0.7, 0.8)  # as 3 escapam
+
+    assert capturar_pokemon([]) is None
+    saida = capsys.readouterr().out
+    assert saida.count("Você jogou a pokebola") == 3
+    assert "Acabaram suas tentativas" in saida
+
+
+def test_sorteio_exatamente_0_6_pega(monkeypatch):
+    api_que_conhece(monkeypatch, "pikachu")
+    respostas_do_usuario(monkeypatch, "pikachu", "Pika")
+    pokebola_que_cai(monkeypatch, 0.6)  # a ponta da régua: <= 0.6 pega
+
+    assert capturar_pokemon([]) is not None
