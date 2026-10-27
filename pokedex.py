@@ -11,7 +11,12 @@ def listar_pokemon(pokedex):
     for pokemon in pokedex:
         peso = calculo(pokemon['peso'])
         apelido = pokemon.get('apelido') or 'sem apelido'
-        linhas.append(f"Nome do pokemón: {pokemon['nome']}\nApelido: {apelido}\nTipo: {', '.join(pokemon['tipos'])}\nPeso: {peso} kg\n")
+        shine = pokemon.get('shiny')
+        if shine:
+            nome = f"✨{pokemon['nome']}✨"
+        else:
+            nome = pokemon['nome']
+        linhas.append(f"Nome do pokemón: {nome}\nApelido: {apelido}\nTipo: {', '.join(pokemon['tipos'])}\nPeso: {peso} kg\n")
     if linhas:
         print("Pokemóns capturados:")
         print("\n".join(linhas))

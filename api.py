@@ -1,5 +1,6 @@
 import requests
 from listas_pokemons import apelido_poke
+import random
 
 def get_pokemon():
     while True:
@@ -26,6 +27,12 @@ def capturar_pokemon(pokedex):
     info_pokemon = get_pokemon()
     if info_pokemon is None:
         return
+    dado = random.randint(1,5)
+    chance = 2
+    shiny = dado == chance
+    if shiny:
+        print("✨ Este é um pokemon Shiny!✨")
+
     print(f"pokemón capturado")
     apelidos = apelido_poke(pokedex)
     primeiro_apelido = input("Digite um apelido para o pokemón:\n").lower().strip()
@@ -43,4 +50,4 @@ def capturar_pokemon(pokedex):
     tipos = []
     for t in info_pokemon['types'][:5]:
         tipos.append(t['type']['name'])
-    return {'nome': nome, 'peso': peso, 'habilidades': habilidades, 'tipos': tipos, 'movimentos': movimentos, 'apelido': primeiro_apelido}
+    return {'nome': nome, 'peso': peso, 'habilidades': habilidades, 'tipos': tipos, 'movimentos': movimentos, 'apelido': primeiro_apelido, 'shiny': shiny}
